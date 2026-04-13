@@ -80,7 +80,7 @@ ui <- fluidPage(
              fluidRow(
                column(width = 12,
                       wellPanel(
-                        selectInput("country_sd", "Select Country:", # Note: unique ID suggested
+                        selectInput("country", "Select Country:", # Note: unique ID suggested
                                     choices  = sort(unique(df2$ctry.lab)),
                                     selected = sort(unique(df2$ctry.lab)))
                       )
@@ -98,7 +98,7 @@ ui <- fluidPage(
              fluidRow(
                column(width = 12,
                       wellPanel(
-                        selectInput("country_ed", "Select Country:", # Note: unique ID suggested
+                        selectInput("country", "Select Country:", # Note: unique ID suggested
                                     choices  = sort(unique(df3$ctry.lab)),
                                     selected = sort(unique(df3$ctry.lab)))
                       )
