@@ -30,8 +30,8 @@ df2 <- edagger.cause2
 df3 <- sd10.cause2
 
 # Readable cause labels
-cause_cols   <- c("Tb_IPB", "dia_Oinf", "Oinfec", "maternal", "cvd", "cancer", "Acc_all", "Degen.dis", "Malaria", "Sen_Ounk")
-cause_labels <- c("TB/IPB", "Diab/Other Inf", "Other Infec", "Maternal", "CVD", "Cancer", "All Accidents", "Degenerative dis", "Malaria", "Senility/Unknown")
+cause_cols   <- c("Tb_IPB", "dia_Oinf", "Oinfec", "maternal", "cvd", "cancer", "Acc_all", "Degen.dis", "Malaria", "Senility", "Ounknown")
+cause_labels <- c("TB/IPB", "Diarr/Other Inf", "Other Infec", "Maternal", "CVD", "Cancer", "All Accidents", "Degenerative dis", "Malaria", "Senility", "Ounknown")
  
 # Apply readable labels and factor order
 df$cause_label <- cause_labels[match(df$Cause, cause_cols)]
@@ -166,7 +166,7 @@ server <- function(input, output) {
         axis.text.y        = element_text(angle = 0,  size = 20),        
         axis.text.x        = element_text(angle = 40, hjust = 1, size = 20),
         plot.title         = element_text(face = "bold", size = 15),
-        legend.position=c(0.12,0.9),
+        #legend.position=c(0.12,0.9),
         legend.background=element_rect(fill="white"),legend.key.size = unit(1,"line"),
         legend.text=element_text(size=18),legend.title=element_text(size=18),        
         panel.grid.major.x = element_blank()
@@ -198,7 +198,7 @@ server <- function(input, output) {
         axis.text.y        = element_text(angle = 0,  size = 20),        
         axis.text.x        = element_text(angle = 40, hjust = 1, size = 20),
         plot.title         = element_text(face = "bold", size = 15),
-        legend.position=c(0.12,0.9),
+        #legend.position=c(0.12,0.9),
         legend.background=element_rect(fill="white"),legend.key.size = unit(1,"line"),
         legend.text=element_text(size=18),legend.title=element_text(size=18),        
         panel.grid.major.x = element_blank()
