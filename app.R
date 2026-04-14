@@ -48,8 +48,6 @@ df3$sex_label   <- ifelse(df3$sex == 1, "Male", "Female")
 
 
 
-# costa rica, Cuba, Dom Rep, first period, with
-
 
 
 ui <- fluidPage(
@@ -64,7 +62,13 @@ ui <- fluidPage(
                       wellPanel(
                         selectInput("country", "Select Country:",
                                     choices  = sort(unique(df$ctry.lab)),
-                                    selected = sort(unique(df$ctry.lab)))
+                                    selected = sort(unique(df$ctry.lab))),
+                        helpText("Excludes Unkn: unknown is included as a cause of death but the file does not have rates"),
+                        helpText("Includes Unkn: unknown is included as a cause of death and the file includes rates"),
+                        helpText("Prop alloc Unkn/Senill: Unknown & Senility death rates are proportionally allocated across well-defined causes of death"),  
+                        helpText("TB/IPB = tb + IPB"),
+                        helpText("Diarr/Other inf = diarrhea + Oinfancy"),
+                        helpText("All Accidents = accidents + Oviol")
                       )
                )
              ),
@@ -82,7 +86,13 @@ ui <- fluidPage(
                       wellPanel(
                         selectInput("country", "Select Country:", # Note: unique ID suggested
                                     choices  = sort(unique(df2$ctry.lab)),
-                                    selected = sort(unique(df2$ctry.lab)))
+                                    selected = sort(unique(df2$ctry.lab))),
+                        helpText("Excludes Unkn: unknown is included as a cause of death but the file does not have rates"),
+                        helpText("Includes Unkn: unknown is included as a cause of death and the file includes rates"),
+                        helpText("Prop alloc Unkn/Senill: Unknown & Senility death rates are proportionally allocated across well-defined causes of death"),  
+                        helpText("TB/IPB = tb + IPB"),
+                        helpText("Diarr/Other inf = diarrhea + Oinfancy"),
+                        helpText("All Accidents = accidents + Oviol")                        
                       )
                )
              ),
@@ -100,7 +110,13 @@ ui <- fluidPage(
                       wellPanel(
                         selectInput("country", "Select Country:", # Note: unique ID suggested
                                     choices  = sort(unique(df3$ctry.lab)),
-                                    selected = sort(unique(df3$ctry.lab)))
+                                    selected = sort(unique(df3$ctry.lab))),
+                        helpText("Excludes Unkn: unknown is included as a cause of death but the file does not have rates"),
+                        helpText("Includes Unkn: unknown is included as a cause of death and the file includes rates"),
+                        helpText("Prop alloc Unkn/Senill: Unknown & Senility death rates are proportionally allocated across well-defined causes of death"),  
+                        helpText("TB/IPB = tb + IPB"),
+                        helpText("Diarr/Other inf = diarrhea + Oinfancy"),
+                        helpText("All Accidents = accidents + Oviol")                        
                       )
                )
              ),
@@ -118,11 +134,11 @@ server <- function(input, output) {
     sub <- df[df$ctry.lab == input$country, ]
     validate(need(nrow(sub) > 0, "No data for selected country."))
 
-    ggplot(sub, aes(x = cause_label, y = Contr, group = case)) +
+    ggplot(sub, aes(x = cause_label, y = Contr, group = case, fill = case)) +
       geom_col(aes(alpha = case ), position = position_dodge(width = 0.8), width = 0.8) +
       # Manually define the alpha levels here
       # 1.0 is fully opaque, lower numbers are more transparent
-      scale_alpha_manual(values = c("Excludes Unkn" = 0.3, "Includes Unkn" = 1.0)) +
+      scale_alpha_manual(values = c("Excludes Unkn" = 0.3, "Includes Unkn" = 1.0, "Prop alloc Unkn/Senill" = 1.0)) +
       facet_grid(rows = vars(sex_label), cols = vars(period), switch="y") +
       scale_fill_brewer(palette = "Set2") +
       labs(title = paste0("Country: ", input$country, "; Decomposition of e(0) by Period"), x = "Cause of death", y = "Contribution (years of life)") +
@@ -135,7 +151,7 @@ server <- function(input, output) {
         axis.text.y        = element_text(angle = 0,  size = 20),
         axis.text.x        = element_text(angle = 40, hjust = 1, size = 20),
         plot.title         = element_text(face = "bold", size = 15),
-        legend.position=c(0.12,0.9),
+       # legend.position=c(0.12,0.9),
         legend.background=element_rect(fill="white"),legend.key.size = unit(1,"line"),
         legend.text=element_text(size=18),legend.title=element_text(size=18), 
         panel.grid.major.x = element_blank()
@@ -149,11 +165,11 @@ server <- function(input, output) {
     sub <- df3[df3$ctry.lab == input$country, ]
     validate(need(nrow(sub) > 0, "No data for selected country."))
   
-    ggplot(sub, aes(x = cause_label, y = Contr, group = case)) +
+    ggplot(sub, aes(x = cause_label, y = Contr, group = case, fill = case)) +
       geom_col(aes(alpha = case ), position = position_dodge(width = 0.8), width = 0.8) +
     # Manually define the alpha levels here
       # 1.0 is fully opaque, lower numbers are more transparent
-      scale_alpha_manual(values = c("Excludes Unkn" = 0.3, "Includes Unkn" = 1.0)) +
+      scale_alpha_manual(values = c("Excludes Unkn" = 0.3, "Includes Unkn" = 1.0, "Prop alloc Unkn/Senill" = 1.0)) +
       facet_grid(rows = vars(sex_label), cols = vars(period), switch="y") +
       scale_fill_brewer(palette = "Set2") +
       labs(title = paste0("Country: ", input$country, "; Decomposition of the Standard Deviation at age 10 by Period"), x = "Cause of death", y = "Contribution (years of life)") +
@@ -181,11 +197,11 @@ server <- function(input, output) {
     sub <- df2[df2$ctry.lab == input$country, ]
     validate(need(nrow(sub) > 0, "No data for selected country."))
     
-    ggplot(sub, aes(x = cause_label, y = Contr, group = case)) +
+    ggplot(sub, aes(x = cause_label, y = Contr, group = case, fill = case)) +
       geom_col(aes(alpha = case ), position = position_dodge(width = 0.8), width = 0.8) +
       # Manually define the alpha levels here
       # 1.0 is fully opaque, lower numbers are more transparent
-      scale_alpha_manual(values = c("Excludes Unkn" = 0.3, "Includes Unkn" = 1.0)) +
+      scale_alpha_manual(values = c("Excludes Unkn" = 0.3, "Includes Unkn" = 1.0, "Prop alloc Unkn/Senill" = 1.0)) +
       facet_grid(rows = vars(sex_label), cols = vars(period), switch="y") +
       scale_fill_brewer(palette = "Set2") +
       labs(title = paste0("Country: ", input$country, "; Decomposition of e.dagger at age 0 by Period"), x = "Cause of death", y = "Contribution (years of life)") +
